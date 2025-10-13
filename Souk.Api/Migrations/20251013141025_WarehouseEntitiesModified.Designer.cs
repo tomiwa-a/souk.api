@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Souk.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Souk.Infrastructure.Data;
 namespace Souk.Api.Migrations
 {
     [DbContext(typeof(SoukDbContext))]
-    partial class SoukDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251013141025_WarehouseEntitiesModified")]
+    partial class WarehouseEntitiesModified
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +52,7 @@ namespace Souk.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Warehouses", (string)null);
+                    b.ToTable("Warehouses");
                 });
 
             modelBuilder.Entity("Souk.Domain.Inventory.Entities.Product", b =>
@@ -92,7 +95,7 @@ namespace Souk.Api.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Souk.Domain.Inventory.Entities.PurchaseOrder", b =>
@@ -138,7 +141,7 @@ namespace Souk.Api.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("PurchaseOrders", (string)null);
+                    b.ToTable("PurchaseOrders");
                 });
 
             modelBuilder.Entity("Souk.Domain.Inventory.Entities.Supplier", b =>
@@ -165,7 +168,7 @@ namespace Souk.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Suppliers", (string)null);
+                    b.ToTable("Suppliers");
                 });
 
             modelBuilder.Entity("Souk.Domain.Inventory.Entities.Product", b =>
