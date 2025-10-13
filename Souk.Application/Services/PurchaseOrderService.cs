@@ -36,7 +36,8 @@ public class PurchaseOrderService(IPurchaseOrdersRepository purchaseOrdersReposi
             WarehouseId = order.WarehouseId,
             Quantity = order.Quantity,
             OrderedAt = order.OrderedAt,
-            ExpectedArrivalDate = order.ExpectedArrivalDate
+            ExpectedArrivalDate = order.ExpectedArrivalDate,
+            ArrivedAt = order.ArrivedAt
         };
     }
 }

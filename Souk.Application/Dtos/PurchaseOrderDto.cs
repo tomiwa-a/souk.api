@@ -9,4 +9,6 @@ public class PurchaseOrderDto
     public int Quantity { get; set; }
     public DateTime OrderedAt { get; set; }
     public DateOnly ExpectedArrivalDate { get; set; }
+    
+    public DateTime? ArrivedAt { get; set; }
 }
