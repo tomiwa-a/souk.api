@@ -1,4 +1,5 @@
 
+using Souk.Api.Controllers;
 using Souk.Application;
 using Souk.Infrastructure;
 
@@ -17,5 +18,10 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 
 app.MapGet("/", () => "Welcome to Souk.Api");
+
+app.RouteProductController();
+app.RouteSupplierController();
+app.RouteWarehouseController();
+app.RoutePurchaseOrderController();
 
 app.Run();
