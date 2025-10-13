@@ -1,0 +1,64 @@
+@page "/warehouses"
+@using UserPresentation.Services
+@inject MockWarehouseService WarehouseService
+
+<PageTitle>Warehouses</PageTitle>
+
+<h1>Warehouses</h1>
+
+<button class="btn btn-primary mb-3" @onclick="ShowCreateModal">Add Warehouse</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Capacity</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var warehouse in warehouses)
+        {
+            <tr>
+                <td>@warehouse.Id</td>
+                <td>@warehouse.Name</td>
+                <td>@warehouse.Location</td>
+                <td>@warehouse.Capacity</td>
+                <td><a href="warehouses/@warehouse.Id" class="btn btn-sm btn-info">Details</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Create Modal Placeholder -->
+@if (showCreateModal)
+{
+    <div class="modal show d-block" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Warehouse</h5>
+                    <button type="button" class="btn-close" @onclick="HideCreateModal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Form will be implemented later.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<Souk.Application.DTOs.WarehouseDto> warehouses = new();
+    private bool showCreateModal;
+
+    protected override async Task OnInitializedAsync()
+    {
+        warehouses = await WarehouseService.GetWarehousesAsync();
+    }
+
+    private void ShowCreateModal() => showCreateModal = true;
+    private void HideCreateModal() => showCreateModal = false;
+}

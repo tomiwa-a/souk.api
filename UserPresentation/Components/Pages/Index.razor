@@ -1,0 +1,65 @@
+@page "/"
+@using UserPresentation.Services
+@inject MockProductService ProductService
+@inject MockSupplierService SupplierService
+@inject MockWarehouseService WarehouseService
+@inject MockPurchaseOrderService PurchaseOrderService
+
+<PageTitle>Home</PageTitle>
+
+<h1>Welcome to Souk Inventory</h1>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Products</h5>
+                <p class="card-text">@productsCount</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Suppliers</h5>
+                <p class="card-text">@suppliersCount</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Warehouses</h5>
+                <p class="card-text">@warehousesCount</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Purchase Orders</h5>
+                <p class="card-text">@ordersCount</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int productsCount;
+    private int suppliersCount;
+    private int warehousesCount;
+    private int ordersCount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var products = await ProductService.GetProductsAsync();
+        var suppliers = await SupplierService.GetSuppliersAsync();
+        var warehouses = await WarehouseService.GetWarehousesAsync();
+        var orders = await PurchaseOrderService.GetPurchaseOrdersAsync();
+
+        productsCount = products.Count;
+        suppliersCount = suppliers.Count;
+        warehousesCount = warehouses.Count;
+        ordersCount = orders.Count;
+    }
+}

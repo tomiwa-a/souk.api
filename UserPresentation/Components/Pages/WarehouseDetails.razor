@@ -1,0 +1,33 @@
+@page "/warehouses/{id:int}"
+@using UserPresentation.Services
+@inject MockWarehouseService WarehouseService
+
+<PageTitle>Warehouse Details</PageTitle>
+
+@if (warehouse != null)
+{
+    <h1>@warehouse.Name</h1>
+    <p>Location: @warehouse.Location</p>
+    <p>Capacity: @warehouse.Capacity</p>
+
+    <h3>Products</h3>
+    <p>Product list will be implemented later.</p>
+
+    <h3>Actions</h3>
+    <button class="btn btn-primary">Add Product</button>
+    <button class="btn btn-secondary">Create Order</button>
+}
+else
+{
+    <p>Warehouse not found.</p>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private Souk.Application.DTOs.WarehouseDto? warehouse;
+
+    protected override async Task OnInitializedAsync()
+    {
+        warehouse = await WarehouseService.GetWarehouseAsync(Id);
+    }
+}

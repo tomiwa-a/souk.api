@@ -1,0 +1,44 @@
+@page "/purchase-orders"
+@using UserPresentation.Services
+@inject MockPurchaseOrderService PurchaseOrderService
+
+<PageTitle>Purchase Orders</PageTitle>
+
+<h1>Purchase Orders</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Product ID</th>
+            <th>Supplier ID</th>
+            <th>Warehouse ID</th>
+            <th>Quantity</th>
+            <th>Ordered At</th>
+            <th>Expected Arrival</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in orders)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.ProductId</td>
+                <td>@order.SupplierId</td>
+                <td>@order.WarehouseId</td>
+                <td>@order.Quantity</td>
+                <td>@order.OrderedAt</td>
+                <td>@order.ExpectedArrivalDate</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<Souk.Application.DTOs.PurchaseOrderDto> orders = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        orders = await PurchaseOrderService.GetPurchaseOrdersAsync();
+    }
+}

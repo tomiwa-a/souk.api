@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Souk.Infrastructure", "Souk
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Souk.Application", "Souk.Application\Souk.Application.csproj", "{F2052A66-55FA-40E9-A739-81F4A3F21205}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserPresentation", "UserPresentation\UserPresentation.csproj", "{18745D3D-12E1-4107-A031-CEBDC929336F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{F2052A66-55FA-40E9-A739-81F4A3F21205}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2052A66-55FA-40E9-A739-81F4A3F21205}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2052A66-55FA-40E9-A739-81F4A3F21205}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18745D3D-12E1-4107-A031-CEBDC929336F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18745D3D-12E1-4107-A031-CEBDC929336F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18745D3D-12E1-4107-A031-CEBDC929336F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18745D3D-12E1-4107-A031-CEBDC929336F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

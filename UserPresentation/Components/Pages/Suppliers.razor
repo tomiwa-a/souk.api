@@ -1,0 +1,60 @@
+@page "/suppliers"
+@using UserPresentation.Services
+@inject MockSupplierService SupplierService
+
+<PageTitle>Suppliers</PageTitle>
+
+<h1>Suppliers</h1>
+
+<button class="btn btn-primary mb-3" @onclick="ShowCreateModal">Add Supplier</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var supplier in suppliers)
+        {
+            <tr>
+                <td>@supplier.Id</td>
+                <td>@supplier.Name</td>
+                <td>@supplier.EmailAddress</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Create Modal Placeholder -->
+@if (showCreateModal)
+{
+    <div class="modal show d-block" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Supplier</h5>
+                    <button type="button" class="btn-close" @onclick="HideCreateModal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Form will be implemented later.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<Souk.Application.DTOs.SupplierDto> suppliers = new();
+    private bool showCreateModal;
+
+    protected override async Task OnInitializedAsync()
+    {
+        suppliers = await SupplierService.GetSuppliersAsync();
+    }
+
+    private void ShowCreateModal() => showCreateModal = true;
+    private void HideCreateModal() => showCreateModal = false;
+}
