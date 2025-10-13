@@ -14,14 +14,30 @@ public class SoukDbContext(DbContextOptions<SoukDbContext> options)
     public DbSet<Warehouse> Warehouses => Set<Warehouse>();
     public DbSet<PurchaseOrder> PurchaseOrders => Set<PurchaseOrder>();
     
-    // protected override void OnModelCreating(ModelBuilder modelBuilder)
-    // {
-    //     base.OnModelCreating(modelBuilder);
-    //     modelBuilder.ApplyConfiguration(new VendorConfiguration());
-    //     modelBuilder.ApplyConfiguration(new PlatformUserConfiguration());
-    //     modelBuilder.ApplyConfiguration(new PlatformRoleConfiguration());
-    //     modelBuilder.ApplyConfiguration(new PlatformPermissionConfiguration());
-    //     // modelBuilder.ApplyConfigurationsFromAssembly(typeof(HostDbContext).Assembly);
-    //         
-    // }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        //
+        // modelBuilder.Entity<Warehouse>()
+        //     .HasMany(w => w.Products)
+        //     .WithOne()
+        //     .HasForeignKey(p => p.WarehouseId)
+        //     .OnDelete(DeleteBehavior.Cascade);
+        //
+        // modelBuilder.Entity<Warehouse>()
+        //     .HasMany(w => w.PurchaseOrders)
+        //     .WithOne()
+        //     .HasForeignKey(po => po.WarehouseId)
+        //     .OnDelete(DeleteBehavior.Cascade);
+        //
+        // modelBuilder.Entity<Product>()
+        //     .HasOne<Supplier>()
+        //     .WithMany()
+        //     .HasForeignKey(p => p.SupplierId);
+        //
+        // modelBuilder.Entity<PurchaseOrder>()
+        //     .HasOne<Product>()
+        //     .WithMany()
+        //     .HasForeignKey(po => po.ProductId);
+    }
 };

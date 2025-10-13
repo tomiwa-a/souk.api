@@ -28,4 +28,13 @@ public class Supplier
 
         };
     }
+
+    public void Update(string name, EmailAddress emailAddress)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentNullException.ThrowIfNull(emailAddress);
+        Name = name;
+        EmailAddress = emailAddress;
+        UpdatedAt = DateTime.UtcNow;
+    }
 }

@@ -1,4 +1,6 @@
-namespace Souk.Domain.Inventory.Repositories;
+
+
+namespace Souk.Domain.Inventory.Enum;
 
 public enum PurchaseStatus
 {

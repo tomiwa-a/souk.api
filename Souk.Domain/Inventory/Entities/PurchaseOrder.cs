@@ -1,5 +1,5 @@
 using Souk.Domain.Inventory.Aggregates;
-using Souk.Domain.Inventory.Repositories;
+using Souk.Domain.Inventory.Enum;
 
 namespace Souk.Domain.Inventory.Entities;
 

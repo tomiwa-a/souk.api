@@ -34,6 +34,15 @@ public class Warehouse
         };
     }
 
+    public void Update(string name, string location)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(location);
+        Name = name;
+        Location = location;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
     public void AddProduct(Product product)
     {
         if (!CanAccommodateQuantity(product.Quantity))
@@ -65,6 +74,21 @@ public class Warehouse
     public bool CanAccommodateQuantity(int quantity) => GetAvailableCapacity() >= quantity;
 
     public List<Product> GetProductsNeedingReorder() => _products.Where(p => p.Quantity < p.ReorderThreshold).ToList();
+
+    public void UpdateProductQuantity(int productId, int newQuantity)
+    {
+        if (!CanAccommodateQuantity(newQuantity))
+        {
+            throw new ArgumentException("Product quantity must be less than available warehouse capacity.");
+        }
+        var productToUpdate = _products.FirstOrDefault(p => p.Id == productId);
+        if (productToUpdate == null)
+        {
+            throw new ArgumentException("Product not found in warehouse.");
+        }
+        productToUpdate.UpdateQuantity(newQuantity);
+        UpdatedAt = DateTime.UtcNow;
+    }
 
     public void UpdateProductQuantity(Product product, int newQuantity)
     {
