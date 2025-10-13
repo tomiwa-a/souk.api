@@ -1,3 +1,5 @@
+using Souk.Domain.Inventory.Enum;
+
 namespace Souk.Application.DTOs;
 
 public class PurchaseOrderDto
@@ -10,5 +12,6 @@ public class PurchaseOrderDto
     public DateTime OrderedAt { get; set; }
     public DateOnly ExpectedArrivalDate { get; set; }
     
+    public PurchaseStatus PurchaseStatus { get; set; }
     public DateTime? ArrivedAt { get; set; }
 }

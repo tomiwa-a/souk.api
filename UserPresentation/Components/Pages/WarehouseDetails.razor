@@ -1,33 +1,91 @@
 @page "/warehouses/{id:int}"
 @using UserPresentation.Services
-@inject MockWarehouseService WarehouseService
+@inject ApiWarehouseService WarehouseService
+@inject ApiProductService ProductService
+@inject ApiPurchaseOrderService PurchaseOrderService
 
 <PageTitle>Warehouse Details</PageTitle>
 
-@if (warehouse != null)
+@if (warehouse == null)
 {
-    <h1>@warehouse.Name</h1>
-    <p>Location: @warehouse.Location</p>
-    <p>Capacity: @warehouse.Capacity</p>
-
-    <h3>Products</h3>
-    <p>Product list will be implemented later.</p>
-
-    <h3>Actions</h3>
-    <button class="btn btn-primary">Add Product</button>
-    <button class="btn btn-secondary">Create Order</button>
+    <p>Loading...</p>
 }
 else
 {
-    <p>Warehouse not found.</p>
+    <h1>@warehouse.Name</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Details</h5>
+            <p class="card-text"><strong>ID:</strong> @warehouse.Id</p>
+            <p class="card-text"><strong>Name:</strong> @warehouse.Name</p>
+            <p class="card-text"><strong>Location:</strong> @warehouse.Location</p>
+            <p class="card-text"><strong>Capacity:</strong> @warehouse.Capacity</p>
+        </div>
+    </div>
+
+    <h3>Products in Warehouse</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in products)
+            {
+                <tr>
+                    <td>@product.Id</td>
+                    <td><NavLink href="@($"products/{product.Id}")">@product.Name</NavLink></td>
+                    <td>@product.Quantity</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h3>Purchase Orders</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Product ID</th>
+                <th>Quantity</th>
+                <th>Ordered At</th>
+                <th>Expected Arrival</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in orders)
+            {
+                <tr>
+                    <td><NavLink href="@($"purchase-orders/{order.Id}")">@order.Id</NavLink></td>
+                    <td>@order.ProductId</td>
+                    <td>@order.Quantity</td>
+                    <td>@order.OrderedAt</td>
+                    <td>@order.ExpectedArrivalDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <NavLink href="@($"warehouses/{warehouse.Id}/add-product")" class="btn btn-success mt-3">Add Product</NavLink>
+    <NavLink href="warehouses" class="btn btn-primary mt-3">Back to Warehouses</NavLink>
 }
 
 @code {
     [Parameter] public int Id { get; set; }
     private Souk.Application.DTOs.WarehouseDto? warehouse;
+    private List<Souk.Application.DTOs.ProductDto> products = new();
+    private List<Souk.Application.DTOs.PurchaseOrderDto> orders = new();
 
     protected override async Task OnInitializedAsync()
     {
         warehouse = await WarehouseService.GetWarehouseAsync(Id);
+        var allProducts = await ProductService.GetProductsAsync();
+        products = allProducts.Where(p => p.WarehouseId == Id).ToList();
+        var allOrders = await PurchaseOrderService.GetPurchaseOrdersAsync();
+        orders = allOrders.Where(o => o.WarehouseId == Id).ToList();
     }
 }

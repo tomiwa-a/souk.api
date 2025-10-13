@@ -1,0 +1,61 @@
+@page "/suppliers/add"
+@rendermode InteractiveServer 
+@using Souk.Application.DTOs
+@using UserPresentation.Services
+@inject ApiSupplierService SupplierService
+@inject NavigationManager Navigation
+
+<PageTitle>Add Supplier</PageTitle>
+
+<h1>Add Supplier</h1>
+
+<EditForm Model="@newSupplier" OnValidSubmit="HandleValidSubmit" FormName="addSupplier" autocomplete="off">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <InputText id="name" class="form-control" @bind-Value="newSupplier.Name" />
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <InputText id="email" class="form-control" @bind-Value="newSupplier.EmailAddress" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Supplier</button>
+    <NavLink href="suppliers" class="btn btn-secondary">Cancel</NavLink>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger mt-3">
+        @errorMessage
+    </div>
+}
+
+
+@code {
+    private class AddSupplierModel
+    {
+        public string Name { get; set; }
+        public string EmailAddress { get; set; }
+    }
+
+    private AddSupplierModel newSupplier = new();
+    private string? errorMessage;
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            var request = new CreateSupplierRequest(newSupplier.Name, newSupplier.EmailAddress);
+            await SupplierService.CreateSupplierAsync(request);
+            Navigation.NavigateTo("suppliers");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Failed to add supplier: {ex.Message}";
+        }
+    }
+}

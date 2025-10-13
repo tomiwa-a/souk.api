@@ -70,7 +70,7 @@ public class WarehouseService(IWarehouseRepository warehouseRepository, IProduct
 
     public async Task<WarehouseDto> IncreaseProductQuantityAsync(int warehouseId, int productId, int quantity)
     {
-        var warehouse = await _warehouseRepository.GetByIdAsync(warehouseId);
+        var warehouse = await _warehouseRepository.GetWarehouseWithProductsAsync(warehouseId);
         if (warehouse == null)
         {
             throw new ArgumentException("Warehouse not found.");
@@ -82,7 +82,7 @@ public class WarehouseService(IWarehouseRepository warehouseRepository, IProduct
     
     public async Task<WarehouseDto> DecreaseProductQuantityAsync(int warehouseId, int productId, int quantity)
     {
-        var warehouse = await _warehouseRepository.GetByIdAsync(warehouseId);
+        var warehouse = await _warehouseRepository.GetWarehouseWithProductsAsync(warehouseId);
         if (warehouse == null)
         {
             throw new ArgumentException("Warehouse not found.");
@@ -122,7 +122,7 @@ public class WarehouseService(IWarehouseRepository warehouseRepository, IProduct
         {
             throw new ArgumentException("Purchase order not found.");
         }
-        var warehouse = await _warehouseRepository.GetByIdAsync(order.WarehouseId);
+        var warehouse = await _warehouseRepository.GetWarehouseWithProductsAsync(order.WarehouseId);
         if (warehouse == null)
         {
             throw new ArgumentException("Warehouse not found.");

@@ -1,10 +1,12 @@
 @page "/purchase-orders"
 @using UserPresentation.Services
-@inject MockPurchaseOrderService PurchaseOrderService
+@inject ApiPurchaseOrderService PurchaseOrderService
 
 <PageTitle>Purchase Orders</PageTitle>
 
 <h1>Purchase Orders</h1>
+
+<NavLink href="purchase-orders/add" class="btn btn-primary mb-3">Add Purchase Order</NavLink>
 
 <table class="table">
     <thead>
@@ -22,7 +24,7 @@
         @foreach (var order in orders)
         {
             <tr>
-                <td>@order.Id</td>
+                <td><NavLink href="@($"purchase-orders/{order.Id}")">@order.Id</NavLink></td>
                 <td>@order.ProductId</td>
                 <td>@order.SupplierId</td>
                 <td>@order.WarehouseId</td>

@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
+using Souk.Application.DTOs;
 using Souk.Application.Ports;
+using Souk.Domain.Inventory.ValueObjects;
 
 namespace Souk.Api.Controllers;
 
@@ -6,7 +9,7 @@ public static class SupplierController
 {
     public static RouteGroupBuilder RouteSupplierController(this WebApplication app)
     {
-        var group = app.MapGroup("api/suppliers");
+        var group = app.MapGroup("api/suppliers").WithParameterValidation();
 
         group.MapGet("/{id:int}", async (int id, ISupplierService supplierService) =>
         {
@@ -22,25 +25,25 @@ public static class SupplierController
             return Results.Ok(suppliers);
         });
 
-        group.MapPost("/", async (string name, string email, ISupplierService supplierService) =>
+        group.MapPost("/", async (CreateSupplierRequest request, ISupplierService supplierService) =>
         {
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.EmailAddress))
             {
                 return Results.BadRequest("Name and email are required.");
             }
-            var supplier = await supplierService.CreateSupplierAsync(name, email);
+            var supplier = await supplierService.CreateSupplierAsync(request.Name, request.EmailAddress);
             return Results.Created($"/api/suppliers/{supplier.Id}", supplier);
         });
 
-        group.MapPut("/{id:int}", async (int id, string name, string email, ISupplierService supplierService) =>
+        group.MapPut("/{id:int}", async (int id,  UpdateSupplierRequest request, ISupplierService supplierService) =>
         {
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.EmailAddress))
             {
                 return Results.BadRequest("Name and email are required.");
             }
             try
             {
-                var supplier = await supplierService.UpdateSupplierAsync(id, name, email);
+                var supplier = await supplierService.UpdateSupplierAsync(id, request.Name, request.EmailAddress);
                 return Results.Ok(supplier);
             }
             catch (ArgumentException)

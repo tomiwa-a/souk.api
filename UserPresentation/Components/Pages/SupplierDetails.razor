@@ -1,0 +1,38 @@
+@page "/suppliers/{id:int}"
+@using Souk.Application.DTOs
+@using UserPresentation.Services
+@inject ApiSupplierService SupplierService
+
+<PageTitle>Supplier Details</PageTitle>
+
+@if (supplier == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <h1>@supplier.Name</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Details</h5>
+            <p class="card-text"><strong>ID:</strong> @supplier.Id</p>
+            <p class="card-text"><strong>Name:</strong> @supplier.Name</p>
+            <p class="card-text"><strong>Email:</strong> @supplier.EmailAddress</p>
+        </div>
+    </div>
+
+    <NavLink href="suppliers" class="btn btn-primary mt-3">Back to Suppliers</NavLink>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private SupplierDto? supplier;
+
+    protected override async Task OnInitializedAsync()
+    {
+        supplier = await SupplierService.GetSupplierAsync(Id);
+    }
+}

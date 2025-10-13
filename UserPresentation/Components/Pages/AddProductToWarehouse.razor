@@ -1,0 +1,121 @@
+@page "/warehouses/{warehouseId:int}/add-product"
+@using Souk.Application.DTOs
+@using UserPresentation.Services
+@inject ApiProductService ProductService
+@inject ApiSupplierService SupplierService
+@inject ApiWarehouseService WarehouseService
+@inject NavigationManager Navigation
+
+<PageTitle>Add Product to Warehouse</PageTitle>
+
+<h1>Add Product to @(warehouse?.Name ?? "Warehouse")</h1>
+
+@if (isLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <EditForm Model="@newProduct" OnValidSubmit="HandleValidSubmit" FormName="addProductToWarehouse">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <InputText id="name" class="form-control" @bind-Value="newProduct.Name"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <InputText id="description" class="form-control" @bind-Value="newProduct.Description"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="quantity" class="form-label">Quantity</label>
+            <InputNumber id="quantity" class="form-control" @bind-Value="newProduct.Quantity"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="reorderThreshold" class="form-label">Reorder Threshold</label>
+            <InputNumber id="reorderThreshold" class="form-control" @bind-Value="newProduct.ReorderThreshold"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="supplierId" class="form-label">Supplier</label>
+            <InputSelect id="supplierId" class="form-control" @bind-Value="newProduct.SupplierId">
+                <option value="">Select Supplier</option>
+                @foreach (var supplier in suppliers)
+                {
+                    <option value="@supplier.Id">@supplier.Name</option>
+                }
+            </InputSelect>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Product</button>
+        <NavLink href="@($"warehouses/{WarehouseId}")" class="btn btn-secondary">Cancel</NavLink>
+    </EditForm>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger mt-3">
+            @errorMessage
+        </div>
+    }
+
+
+@code {
+    [Parameter]
+    public int WarehouseId { get; set; }
+
+    private class AddProductModel
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int Quantity { get; set; }
+        public int ReorderThreshold { get; set; }
+        public int SupplierId { get; set; }
+        public int WarehouseId { get; set; }
+    }
+
+    private AddProductModel newProduct = new();
+    private List<SupplierDto> suppliers = new();
+    private WarehouseDto? warehouse;
+    private bool isLoading = true;
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        suppliers = await SupplierService.GetSuppliersAsync();
+        warehouse = await WarehouseService.GetWarehouseAsync(WarehouseId);
+        newProduct.WarehouseId = WarehouseId;
+        isLoading = false;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (newProduct.SupplierId == 0)
+        {
+            errorMessage = "Please select a supplier.";
+            return;
+        }
+        try
+        {
+            var request = new CreateProductRequest
+            {
+                Name = newProduct.Name,
+                Description = newProduct.Description,
+                Quantity = newProduct.Quantity,
+                ReorderThreshold = newProduct.ReorderThreshold,
+                SupplierId = newProduct.SupplierId,
+                WarehouseId = newProduct.WarehouseId
+            };
+            await WarehouseService.AddProductToWarehouseAsync(WarehouseId, request);
+            Navigation.NavigateTo($"warehouses/{WarehouseId}");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Failed to add product: {ex.Message}";
+        }
+    }
+}
+}

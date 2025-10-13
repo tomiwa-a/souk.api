@@ -1,0 +1,83 @@
+@page "/products/{id:int}"
+@using Souk.Application.DTOs
+@using UserPresentation.Services
+@inject ApiProductService ProductService
+
+<PageTitle>Product Details</PageTitle>
+
+@if (product == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <h1>@product.Name</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Details</h5>
+            <p class="card-text"><strong>ID:</strong> @product.Id</p>
+            <p class="card-text"><strong>Name:</strong> @product.Name</p>
+            <p class="card-text"><strong>Description:</strong> @product.Description</p>
+            <p class="card-text"><strong>Quantity:</strong> @product.Quantity
+                <input type="number" class="form-control d-inline-block ms-2" style="width: 80px;" @bind="adjustmentAmount" min="1" />
+                <button class="btn btn-sm btn-success ms-1" @onclick="() => IncreaseQuantity()">Add</button>
+                <button class="btn btn-sm btn-danger ms-1" @onclick="() => DecreaseQuantity()">Subtract</button>
+            </p>
+            <p class="card-text"><strong>Reorder Threshold:</strong> @product.ReorderThreshold</p>
+            <p class="card-text"><strong>Supplier ID:</strong> @product.SupplierId</p>
+            <p class="card-text"><strong>Warehouse ID:</strong> @product.WarehouseId</p>
+        </div>
+    </div>
+
+    <NavLink href="products" class="btn btn-primary mt-3">Back to Products</NavLink>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private ProductDto? product;
+    private int adjustmentAmount = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        product = await ProductService.GetProductAsync(Id);
+    }
+
+    private async Task IncreaseQuantity()
+    {
+        if (product != null)
+        {
+            await ProductService.UpdateProductQuantityAsync(product.Id, product.Quantity + 1);
+            product.Quantity += 1;
+        }
+    }
+
+    private async Task DecreaseQuantity()
+    {
+        if (product != null && product.Quantity > 0)
+        {
+            await ProductService.UpdateProductQuantityAsync(product.Id, product.Quantity - 1);
+            product.Quantity -= 1;
+        }
+    }
+
+    private async Task AddAmount()
+    {
+        if (product != null && adjustmentAmount > 0)
+        {
+            await ProductService.UpdateProductQuantityAsync(product.Id, product.Quantity + adjustmentAmount);
+            product.Quantity += adjustmentAmount;
+        }
+    }
+
+    private async Task SubtractAmount()
+    {
+        if (product != null && adjustmentAmount > 0 && product.Quantity >= adjustmentAmount)
+        {
+            await ProductService.UpdateProductQuantityAsync(product.Id, product.Quantity - adjustmentAmount);
+            product.Quantity -= adjustmentAmount;
+        }
+    }
+}

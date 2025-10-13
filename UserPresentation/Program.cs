@@ -7,10 +7,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddScoped<MockProductService>();
-builder.Services.AddScoped<MockSupplierService>();
-builder.Services.AddScoped<MockWarehouseService>();
-builder.Services.AddScoped<MockPurchaseOrderService>();
+builder.Services.AddHttpClient("SoukApi", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5156");
+});
+
+builder.Services.AddScoped<ApiProductService>();
+builder.Services.AddScoped<ApiSupplierService>();
+builder.Services.AddScoped<ApiWarehouseService>();
+builder.Services.AddScoped<ApiPurchaseOrderService>();
 
 var app = builder.Build();
 

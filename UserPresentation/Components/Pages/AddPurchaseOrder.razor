@@ -1,0 +1,76 @@
+@page "/purchase-orders/add"
+@using Souk.Application.DTOs
+@using UserPresentation.Services
+@inject ApiWarehouseService WarehouseService
+@inject NavigationManager Navigation
+
+<PageTitle>Add Purchase Order</PageTitle>
+
+<h1>Add Purchase Order</h1>
+
+<EditForm Model="@newOrder" OnValidSubmit="HandleValidSubmit" FormName="addPurchaseOrder">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="productId" class="form-label">Product ID</label>
+        <InputNumber id="productId" class="form-control" @bind-Value="newOrder.ProductId" />
+    </div>
+
+    <div class="mb-3">
+        <label for="warehouseId" class="form-label">Warehouse ID</label>
+        <InputNumber id="warehouseId" class="form-control" @bind-Value="newOrder.WarehouseId" />
+    </div>
+
+    <div class="mb-3">
+        <label for="quantity" class="form-label">Quantity</label>
+        <InputNumber id="quantity" class="form-control" @bind-Value="newOrder.Quantity" />
+    </div>
+
+     <button type="submit" class="btn btn-primary">Add Purchase Order</button>
+     <NavLink href="purchase-orders" class="btn btn-secondary">Cancel</NavLink>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger mt-3">
+        @errorMessage
+    </div>
+}
+
+
+@code {
+    private class AddPurchaseOrderModel
+    {
+        public int ProductId { get; set; }
+        public int WarehouseId { get; set; }
+        public int Quantity { get; set; }
+    }
+
+    private AddPurchaseOrderModel newOrder = new();
+    private string? errorMessage;
+
+    private async Task HandleValidSubmit()
+    {
+        if (newOrder.ProductId == 0 || newOrder.WarehouseId == 0 || newOrder.Quantity <= 0)
+        {
+            errorMessage = "Please provide valid Product ID, Warehouse ID, and Quantity greater than 0.";
+            return;
+        }
+        try
+        {
+            var request = new CreatePurchaseOrderRequest
+            {
+                ProductId = newOrder.ProductId,
+                WarehouseId = newOrder.WarehouseId,
+                Quantity = newOrder.Quantity
+            };
+            await WarehouseService.CreatePurchaseOrderAsync(newOrder.WarehouseId, request);
+            Navigation.NavigateTo("purchase-orders");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Failed to add purchase order: {ex.Message}";
+        }
+    }
+}

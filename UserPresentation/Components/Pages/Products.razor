@@ -1,12 +1,12 @@
 @page "/products"
 @using UserPresentation.Services
-@inject MockProductService ProductService
+@inject ApiProductService ProductService
 
 <PageTitle>Products</PageTitle>
 
 <h1>Products</h1>
 
-<button class="btn btn-primary mb-3" @onclick="ShowCreateModal">Add Product</button>
+<NavLink href="products/add" class="btn btn-primary mb-3">Add Product</NavLink>
 
 <table class="table">
     <thead>
@@ -25,7 +25,7 @@
         {
             <tr>
                 <td>@product.Id</td>
-                <td>@product.Name</td>
+                <td><NavLink href="@($"products/{product.Id}")">@product.Name</NavLink></td>
                 <td>@product.Description</td>
                 <td>@product.Quantity</td>
                 <td>@product.ReorderThreshold</td>
@@ -36,33 +36,13 @@
     </tbody>
 </table>
 
-<!-- Create Modal Placeholder -->
-@if (showCreateModal)
-{
-    <div class="modal show d-block" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add Product</h5>
-                    <button type="button" class="btn-close" @onclick="HideCreateModal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Form will be implemented later.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-}
+
 
 @code {
     private List<Souk.Application.DTOs.ProductDto> products = new();
-    private bool showCreateModal;
 
     protected override async Task OnInitializedAsync()
     {
         products = await ProductService.GetProductsAsync();
     }
-
-    private void ShowCreateModal() => showCreateModal = true;
-    private void HideCreateModal() => showCreateModal = false;
 }

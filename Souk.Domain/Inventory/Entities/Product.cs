@@ -37,6 +37,8 @@ public class Product
             Description = description,
             ReorderThreshold = reorderThreshold,
             Quantity = quantity,
+            SupplierId = supplierId,
+            WarehouseId = warehouseId,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
         };

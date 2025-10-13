@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Souk.Application.DTOs;
 using Souk.Application.Ports;
 
@@ -29,25 +30,25 @@ public static class WarehouseController
             return Results.Ok(warehouses);
         });
 
-        group.MapPost("/", async (string name, string location, int capacity, IWarehouseService warehouseService) =>
+        group.MapPost("/", async ([FromBody] CreateWarehouseRequest request, IWarehouseService warehouseService) =>
         {
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(location) || capacity <= 0)
+            if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.Location) || request.Capacity <= 0)
             {
                 return Results.BadRequest("Name, location, and positive capacity are required.");
             }
-            var warehouse = await warehouseService.CreateWarehouseAsync(name, location, capacity);
+            var warehouse = await warehouseService.CreateWarehouseAsync(request.Name, request.Location, request.Capacity);
             return Results.Created($"/api/warehouses/{warehouse.Id}", warehouse);
         });
 
-        group.MapPut("/{id:int}", async (int id, string name, string location, IWarehouseService warehouseService) =>
+        group.MapPut("/{id:int}", async (int id, [FromBody] UpdateWarehouseRequest request, IWarehouseService warehouseService) =>
         {
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(location))
+            if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.Location))
             {
                 return Results.BadRequest("Name and location are required.");
             }
             try
             {
-                var warehouse = await warehouseService.UpdateWarehouseAsync(id, name, location);
+                var warehouse = await warehouseService.UpdateWarehouseAsync(id, request.Name, request.Location);
                 return Results.Ok(warehouse);
             }
             catch (ArgumentException)

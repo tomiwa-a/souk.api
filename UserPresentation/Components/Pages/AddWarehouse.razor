@@ -1,0 +1,66 @@
+@page "/warehouses/add"
+@using Souk.Application.DTOs
+@using UserPresentation.Services
+@inject ApiWarehouseService WarehouseService
+@inject NavigationManager Navigation
+
+<PageTitle>Add Warehouse</PageTitle>
+
+<h1>Add Warehouse</h1>
+
+<EditForm Model="@newWarehouse" OnValidSubmit="HandleValidSubmit" FormName="addWarehouse">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <InputText id="name" class="form-control" @bind-Value="newWarehouse.Name" />
+    </div>
+
+    <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <InputText id="location" class="form-control" @bind-Value="newWarehouse.Location" />
+    </div>
+
+    <div class="mb-3">
+        <label for="capacity" class="form-label">Capacity</label>
+        <InputNumber id="capacity" class="form-control" @bind-Value="newWarehouse.Capacity" />
+    </div>
+
+     <button type="submit" class="btn btn-primary">Add Warehouse</button>
+     <NavLink href="warehouses" class="btn btn-secondary">Cancel</NavLink>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger mt-3">
+        @errorMessage
+    </div>
+}
+
+
+@code {
+    private class AddWarehouseModel
+    {
+        public string Name { get; set; }
+        public string Location { get; set; }
+        public int Capacity { get; set; }
+    }
+
+    private AddWarehouseModel newWarehouse = new();
+    private string? errorMessage;
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            var request = new CreateWarehouseRequest(newWarehouse.Name, newWarehouse.Location, newWarehouse.Capacity);
+            await WarehouseService.CreateWarehouseAsync(request);
+            Navigation.NavigateTo("warehouses");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Failed to add warehouse: {ex.Message}";
+        }
+    }
+}
