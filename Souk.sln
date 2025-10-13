@@ -1,8 +1,34 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Souk.Api", "Souk.Api\Souk.Api.csproj", "{4F9FBC8D-A4A9-425C-93D9-462ADEAA3E41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Souk.Domain", "Souk.Domain\Souk.Domain.csproj", "{3332331A-9741-4E67-B46A-4339A39B0178}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Souk.Infrastructure", "Souk.Infrastructure\Souk.Infrastructure.csproj", "{B71466D8-0C8D-4DF1-8126-38C62330DA4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Souk.Application", "Souk.Application\Souk.Application.csproj", "{F2052A66-55FA-40E9-A739-81F4A3F21205}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F9FBC8D-A4A9-425C-93D9-462ADEAA3E41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F9FBC8D-A4A9-425C-93D9-462ADEAA3E41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F9FBC8D-A4A9-425C-93D9-462ADEAA3E41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F9FBC8D-A4A9-425C-93D9-462ADEAA3E41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3332331A-9741-4E67-B46A-4339A39B0178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3332331A-9741-4E67-B46A-4339A39B0178}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3332331A-9741-4E67-B46A-4339A39B0178}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3332331A-9741-4E67-B46A-4339A39B0178}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B71466D8-0C8D-4DF1-8126-38C62330DA4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B71466D8-0C8D-4DF1-8126-38C62330DA4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B71466D8-0C8D-4DF1-8126-38C62330DA4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B71466D8-0C8D-4DF1-8126-38C62330DA4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2052A66-55FA-40E9-A739-81F4A3F21205}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2052A66-55FA-40E9-A739-81F4A3F21205}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2052A66-55FA-40E9-A739-81F4A3F21205}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2052A66-55FA-40E9-A739-81F4A3F21205}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

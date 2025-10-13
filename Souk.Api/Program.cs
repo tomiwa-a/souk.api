@@ -1,4 +1,5 @@
 
+using Souk.Application;
 using Souk.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ if (string.IsNullOrEmpty(connectionString))
 }
 
 builder.Services.AddInfrastructureServices(connectionString);
+builder.Services.AddApplicationServices();
 var app = builder.Build();
 
 

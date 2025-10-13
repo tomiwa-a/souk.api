@@ -15,11 +15,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
       <Folder Include="Migrations\" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Souk.Application\Souk.Application.csproj" />
       <ProjectReference Include="..\Souk.Infrastructure\Souk.Infrastructure.csproj" />
     </ItemGroup>
 
