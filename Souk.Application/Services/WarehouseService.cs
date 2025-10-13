@@ -68,17 +68,31 @@ public class WarehouseService(IWarehouseRepository warehouseRepository, IProduct
         return MapToDto(updated);
     }
 
-    public async Task<WarehouseDto> UpdateProductQuantityAsync(int warehouseId, int productId, int newQuantity)
+    public async Task<WarehouseDto> IncreaseProductQuantityAsync(int warehouseId, int productId, int quantity)
     {
         var warehouse = await _warehouseRepository.GetByIdAsync(warehouseId);
         if (warehouse == null)
         {
             throw new ArgumentException("Warehouse not found.");
         }
-        warehouse.UpdateProductQuantity(productId, newQuantity);
+        warehouse.IncreaseProductQuantity(productId, quantity);
         var updated = await _warehouseRepository.UpdateAsync(warehouse);
         return MapToDto(updated);
     }
+    
+    public async Task<WarehouseDto> DecreaseProductQuantityAsync(int warehouseId, int productId, int quantity)
+    {
+        var warehouse = await _warehouseRepository.GetByIdAsync(warehouseId);
+        if (warehouse == null)
+        {
+            throw new ArgumentException("Warehouse not found.");
+        }
+        warehouse.DecreaseProductQuantity(productId, quantity);
+        var updated = await _warehouseRepository.UpdateAsync(warehouse);
+        return MapToDto(updated);
+    }
+    
+    
 
     public async Task<PurchaseOrderDto> CreatePurchaseOrderAsync(CreatePurchaseOrderRequest request)
     {

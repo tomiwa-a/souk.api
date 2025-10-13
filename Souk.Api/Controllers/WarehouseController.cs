@@ -69,15 +69,32 @@ public static class WarehouseController
             }
         });
 
-        group.MapPut("/{id:int}/products/{productId:int}/quantity", async (int id, int productId, int newQuantity, IWarehouseService warehouseService) =>
+        group.MapPut("/{id:int}/products/{productId:int}/increase", async (int id, int productId, int quantity, IWarehouseService warehouseService) =>
         {
-            if (newQuantity < 0)
+            if (quantity < 0)
             {
                 return Results.BadRequest("Quantity must be non-negative.");
             }
             try
             {
-                var warehouse = await warehouseService.UpdateProductQuantityAsync(id, productId, newQuantity);
+                var warehouse = await warehouseService.IncreaseProductQuantityAsync(id, productId, quantity);
+                return Results.Ok(warehouse);
+            }
+            catch (ArgumentException ex)
+            {
+                return Results.BadRequest(ex.Message);
+            }
+        });
+        
+        group.MapPut("/{id:int}/products/{productId:int}/decrease", async (int id, int productId, int quantity, IWarehouseService warehouseService) =>
+        {
+            if (quantity < 0)
+            {
+                return Results.BadRequest("Quantity must be non-negative.");
+            }
+            try
+            {
+                var warehouse = await warehouseService.DecreaseProductQuantityAsync(id, productId, quantity);
                 return Results.Ok(warehouse);
             }
             catch (ArgumentException ex)

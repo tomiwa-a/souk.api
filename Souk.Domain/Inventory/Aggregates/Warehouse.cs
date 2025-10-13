@@ -75,29 +75,46 @@ public class Warehouse
 
     public List<Product> GetProductsNeedingReorder() => _products.Where(p => p.Quantity < p.ReorderThreshold).ToList();
 
-    public void UpdateProductQuantity(int productId, int newQuantity)
+    public void IncreaseProductQuantity(int productId, int quantity)
     {
-        if (!CanAccommodateQuantity(newQuantity))
-        {
-            throw new ArgumentException("Product quantity must be less than available warehouse capacity.");
-        }
         var productToUpdate = _products.FirstOrDefault(p => p.Id == productId);
         if (productToUpdate == null)
         {
             throw new ArgumentException("Product not found in warehouse.");
         }
-        productToUpdate.UpdateQuantity(newQuantity);
-        UpdatedAt = DateTime.UtcNow;
+        int newQuantity = productToUpdate.Quantity + quantity;
+        UpdateProductQuantity(productToUpdate, newQuantity);
     }
+    public void DecreaseProductQuantity(int productId, int quantity)
+    {
+        var productToUpdate = _products.FirstOrDefault(p => p.Id == productId);
+        if (productToUpdate == null)
+        {
+            throw new ArgumentException("Product not found in warehouse.");
+        }
+        int newQuantity = productToUpdate.Quantity - quantity;
+        if (newQuantity <= 0)
+        {
+            throw new ArgumentException("Insufficient quantity.");
+        }
+        UpdateProductQuantity(productToUpdate, newQuantity);
 
-    public void UpdateProductQuantity(Product product, int newQuantity)
+        if (newQuantity < productToUpdate.ReorderThreshold)
+        {
+            int targetQuantity = productToUpdate.ReorderThreshold + (productToUpdate.ReorderThreshold / 2);
+            int quantityToOrder = Math.Min(GetAvailableCapacity(), Math.Max(0, targetQuantity - newQuantity));
+            
+            CreatePurchaseOrder(productId, quantityToOrder);
+        }
+        
+    }
+    private void UpdateProductQuantity(Product product, int newQuantity)
     {
         if (!CanAccommodateQuantity(newQuantity))
         {
             throw new ArgumentException("Product quantity must be less than available warehouse capacity.");
         }
-        var productToUpdate = _products.FirstOrDefault(p => p.Id == product.Id);
-        productToUpdate?.UpdateQuantity(newQuantity);
+        product.UpdateQuantity(newQuantity);
         UpdatedAt = DateTime.UtcNow;
     }
     

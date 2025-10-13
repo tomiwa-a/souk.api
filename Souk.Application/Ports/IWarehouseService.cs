@@ -11,7 +11,8 @@ public interface IWarehouseService
     Task<WarehouseDto> CreateWarehouseAsync(string name, string location, int capacity);
     Task<WarehouseDto> UpdateWarehouseAsync(int id, string name, string location);
     Task<WarehouseDto> AddProductToWarehouseAsync(CreateProductRequest request);
-    Task<WarehouseDto> UpdateProductQuantityAsync(int warehouseId, int productId, int newQuantity);
+    Task<WarehouseDto> IncreaseProductQuantityAsync(int warehouseId, int productId, int quantity);
+    Task<WarehouseDto> DecreaseProductQuantityAsync(int warehouseId, int productId, int quantity);
     Task<PurchaseOrderDto> CreatePurchaseOrderAsync(CreatePurchaseOrderRequest request);
     Task FulfillPurchaseOrderAsync(int orderId);
 }
