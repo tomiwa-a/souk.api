@@ -8,6 +8,8 @@ public class Warehouse
     public string Name { get; private set; }
     public string Location { get; private set; }
     public int Capacity { get; private set; }
+    
+    public int CapacityUsed { get; private set; }
 
     private readonly List<Product> _products = new();
     public IReadOnlyCollection<Product> Products => _products.AsReadOnly();
@@ -20,15 +22,24 @@ public class Warehouse
 
     private Warehouse() { }
 
-    public static Warehouse Create(string name, string location, int capacity = 0)
+    public static Warehouse Create(string name, string location, int capacity = 0, int capacityUsed = 0)
     {
         ArgumentNullException.ThrowIfNull(name);
         ArgumentNullException.ThrowIfNull(location);
+        if (capacity < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(capacity));
+        }
+        if (capacityUsed < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(capacityUsed));
+        }
         return new Warehouse
         {
             Name = name,
             Location = location,
             Capacity = capacity,
+            CapacityUsed = capacityUsed,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
         };
@@ -53,7 +64,9 @@ public class Warehouse
         if (_products.All(p => p.Id != product.Id))
         {
             _products.Add(product);
+            CapacityUsed += product.Quantity;
         }
+        EnsureCapacityUsedNonNegative();
         UpdatedAt = DateTime.UtcNow;
     }
 
@@ -63,11 +76,13 @@ public class Warehouse
         if (productToRemove != null)
         {
             _products.Remove(productToRemove);
+            CapacityUsed -= productToRemove.Quantity;
         }
+        EnsureCapacityUsedNonNegative();
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public int GetCurrentCapacityUsed() => _products.Sum(p => p.Quantity);
+    public int GetCurrentCapacityUsed() => CapacityUsed;
 
     public int GetAvailableCapacity() => Capacity - GetCurrentCapacityUsed();
 
@@ -110,11 +125,14 @@ public class Warehouse
     }
     private void UpdateProductQuantity(Product product, int newQuantity)
     {
-        if (!CanAccommodateQuantity(newQuantity))
+        int oldQuantity = product.Quantity;
+        if (!CanAccommodateQuantity(newQuantity - oldQuantity))
         {
             throw new ArgumentException("Product quantity must be less than available warehouse capacity.");
         }
         product.UpdateQuantity(newQuantity);
+        CapacityUsed += (newQuantity - oldQuantity);
+        EnsureCapacityUsedNonNegative();
         UpdatedAt = DateTime.UtcNow;
     }
     
@@ -147,8 +165,15 @@ public class Warehouse
         if (product != null)
         {
             product.UpdateQuantity(product.Quantity + order.Quantity);
+            CapacityUsed += order.Quantity;
         }
+        EnsureCapacityUsedNonNegative();
         // _purchaseOrders.Remove(order);
         UpdatedAt = DateTime.UtcNow;
+    }
+    
+    private void EnsureCapacityUsedNonNegative()
+    {
+        if (CapacityUsed < 0) throw new InvalidOperationException("CapacityUsed cannot be negative.");
     }
 }

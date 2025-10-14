@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Souk.Application", "Souk.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserPresentation", "UserPresentation\UserPresentation.csproj", "{18745D3D-12E1-4107-A031-CEBDC929336F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Souk.Domain.Tests", "Souk.Domain.Tests\Souk.Domain.Tests.csproj", "{9D011D75-F23D-4B39-ABB3-8FAD2DB1A387}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{18745D3D-12E1-4107-A031-CEBDC929336F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18745D3D-12E1-4107-A031-CEBDC929336F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18745D3D-12E1-4107-A031-CEBDC929336F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D011D75-F23D-4B39-ABB3-8FAD2DB1A387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D011D75-F23D-4B39-ABB3-8FAD2DB1A387}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D011D75-F23D-4B39-ABB3-8FAD2DB1A387}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D011D75-F23D-4B39-ABB3-8FAD2DB1A387}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
