@@ -62,7 +62,7 @@ Once the API is running, open `presentation/index.html` in a web browser. This w
 ## Author
 
 **Amole Oluwatomiwa Joseph**  
-Email: [tomiwaamole@gmail.com](mailto:tomiwaamole@gmail.com)  
+Email: [tomiwamole@gmail.com](mailto:tomiwamole@gmail.com)  
 CV: [View CV](https://docs.google.com/document/d/1TomOXhWMLlG3aWA5sJcHlpPU5Hcso5q1nqlFQeaO4NA/edit?usp=sharing)
 
 This project is submitted as an application for the Senior Backend Engineering role.
